@@ -6,6 +6,7 @@ import time
 import shutil
 
 ASCII_CHARS = "@%#*+=-:.!@#$^&*()"
+FPS = 60
 
 def resize_image(image, new_width):
     width, height = image.size
@@ -44,7 +45,7 @@ def main():
             ascii_frame = convert_frame_to_ascii(frame, new_width=terminal_width)
             os.system('cls' if os.name == 'nt' else 'clear')
             print(ascii_frame)
-            time.sleep(1 / 60)  
+            time.sleep(1 / FPS)  
 
     except KeyboardInterrupt:
         print("Exiting gracefully...")

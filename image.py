@@ -1,9 +1,7 @@
 import sys
-import imageio
-from PIL import Image
 import numpy as np
+from PIL import Image
 import os
-import time
 import shutil
 
 ASCII_CHARS = "@%#*+=-:. "
@@ -26,36 +24,24 @@ def pixels_to_ascii(image):
         ascii_str += "\n"
     return ascii_str
 
-def convert_frame_to_ascii(frame, new_width):
-    image = Image.fromarray(frame)
-    image = resize_image(image, new_width)
-    ascii_str = pixels_to_ascii(image)
-    return ascii_str
-
-def convert_video_to_ascii(video_path):
+def convert_image_to_ascii(image_path):
     terminal_size = shutil.get_terminal_size()
     terminal_width = terminal_size.columns
 
-    print("Starting video conversion...")
+    print("Starting image conversion...")
     try:
-        reader = imageio.get_reader(video_path)
-        for frame in reader:
-            frame = np.array(frame)
-            ascii_frame = convert_frame_to_ascii(frame, new_width=terminal_width)
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print(ascii_frame)
-            time.sleep(1 / 60)  
+        image = Image.open(image_path)
+        image = resize_image(image, new_width=terminal_width)
+        ascii_str = pixels_to_ascii(image)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(ascii_str)
 
-    except KeyboardInterrupt:
-        print("Exiting gracefully...")
     except Exception as e:
         print(f"An error occurred: {e}")
-    finally:
-        reader.close()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python video.py <video_path>")
+        print("Usage: python image.py <image_path>")
     else:
-        video_path = sys.argv[1]
-        convert_video_to_ascii(video_path)
+        image_path = sys.argv[1]
+        convert_image_to_ascii(image_path)
